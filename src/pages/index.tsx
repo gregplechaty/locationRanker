@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
+import styles from "styles/Home.module.css";
 import Button from "@mui/material/Button";
 import Image from "next/image";
 import mapIcon from "public/icons8-map-marker-94.png";
@@ -17,8 +17,10 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${styles.main} ${inter.className}`}>
-        <Image src={mapIcon} alt="Picture of the author" placeholder="blur" />
+      <main
+        className={`${styles.main} ${styles.backgroundImg} ${inter.className}`}
+      >
+        <Image src={mapIcon} alt="Map icon" placeholder="blur" />
         <div>
           Hi! This is Location Ranker. Check out some locations and see how they
           stack up.

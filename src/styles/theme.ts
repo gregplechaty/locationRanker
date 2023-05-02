@@ -2,18 +2,21 @@ import { createTheme } from "@mui/material/styles"; //"@mui/system";
 
 export const defaultTheme = createTheme({
   palette: {
-    background: {
-      paper: "#fff",
-    },
-    text: {
-      primary: "#173A5E",
-      secondary: "#46505A",
-    },
-    action: {
-      active: "#001E3C",
-    },
+    mode: "light",
     primary: {
-      main: "#556cd6",
+      main: "#7db53f",
+    },
+    secondary: {
+      main: "#f50057",
+    },
+  },
+  typography: {
+    fontFamily: "Crimson Pro",
+    h1: {
+      fontSize: "5rem",
+    },
+    h4: {
+      fontSize: "2rem",
     },
   },
 });
