@@ -9,6 +9,8 @@ import AddIcon from "@mui/icons-material/Add";
 import Stack from "@mui/material/Stack";
 import { AntSwitch } from "./Priorities/AntSwitch";
 import ModeDropdown from "./Priorities/ModeDropdown";
+import Button from "@mui/material/Button";
+import { findPlaces } from "utils/search/googlePlacesSearch";
 
 const Priorities = () => {
   return (
@@ -18,6 +20,11 @@ const Priorities = () => {
           <Typography variant="h4" component="h3">
             Your Priorities
           </Typography>
+          <Box paddingY={2}>
+            <Button variant="contained" onClick={findPlaces}>
+              Query Your Priorities
+            </Button>
+          </Box>
           <TextField
             sx={{ width: "90%" }}
             label="Home Address"
@@ -27,6 +34,27 @@ const Priorities = () => {
           />
           <Paper elevation={3} sx={{ padding: "1rem", margin: "1rem 0.5rem" }}>
             <Box display="flex" flexDirection="column">
+              <Box display="flex" paddingY={1}>
+                <Box paddingX={1}>
+                  <Typography variant="h5" component="h4">
+                    Look for This
+                  </Typography>
+                </Box>
+                <Box paddingX={1}>
+                  <TextField
+                    label="Weight"
+                    type="number"
+                    variant="outlined"
+                    inputProps={{
+                      inputMode: "numeric",
+                      pattern: "[0-9]*",
+                      shrink: "true",
+                      step: 1,
+                    }}
+                  />
+                </Box>
+              </Box>
+
               <Box paddingY={1}>
                 <TextField
                   sx={{ width: "25rem" }}
@@ -44,7 +72,7 @@ const Priorities = () => {
                   inputProps={{
                     inputMode: "numeric",
                     pattern: "[0-9]*",
-                    shrink: true,
+                    shrink: "true",
                     step: 0.1,
                   }}
                 />

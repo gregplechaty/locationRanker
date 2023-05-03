@@ -32,6 +32,8 @@ export default function Rank() {
           <Link href="/">Home</Link>
         </Button>
       </div>
+      {/* invisible map */}
+      <div id="invisibleMap" style={{ width: "0px", height: "0px" }}></div>
     </Container>
   );
 }
