@@ -7,9 +7,6 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import Stack from "@mui/material/Stack";
-import { AntSwitch } from "./AntSwitch";
-import ModeDropdown from "./ModeDropdown";
 import Button from "@mui/material/Button";
 import { findPlaces } from "utils/search/googlePlacesSearch";
 import { reducer, PlaceOfInterest } from "./utils";
@@ -19,6 +16,9 @@ const initialPlacesOfInterest: PlaceOfInterest[] = [
   {
     searchTerm: "",
     weight: 100,
+    distance: 1,
+    inMiles: true,
+    transportMode: "walk",
   },
 ];
 
@@ -28,7 +28,6 @@ const Priorities = () => {
     reducer,
     initialPlacesOfInterest
   );
-  console.log("state", placesOfInterest);
   return (
     <Grid item xs={12} md={12}>
       <Paper elevation={2}>

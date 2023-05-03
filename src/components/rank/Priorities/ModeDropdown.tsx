@@ -1,29 +1,42 @@
-import * as React from "react";
+import React from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { Dispatch } from "react";
+import { PlaceOfInterestAction, SearchParameterActions } from "./utils";
 
-const TransportationMethod = {
-  WALK: "Walk",
-  DRIVE: "Drive",
-  PUBLICTRANSPORT: "Public Transport",
-  CYCLING: "Cycling",
-};
+const options = [
+  { value: "walk", description: "Walking" },
+  { value: "cycle", description: "Cycling" },
+  { value: "drive", description: "Driving" },
+  { value: "transport", description: "Public Transit" },
+];
 
-export default function SelectAutoWidth() {
-  const [transportMode, setTransportMode] = React.useState(
-    TransportationMethod.WALK
-  );
+interface IProps {
+  transportMode: string;
+  dispatch: Dispatch<PlaceOfInterestAction>;
+}
+
+export default function SelectAutoWidth(props: IProps) {
+  const { transportMode, dispatch } = props;
 
   const handleChange = (event: SelectChangeEvent) => {
-    setTransportMode(event.target.value);
+    dispatch({
+      type: SearchParameterActions.Edit,
+      payload: {
+        position: 0,
+        transportMode: event.target.value,
+      },
+    });
   };
 
   return (
     <div>
       <FormControl sx={{ m: 1, minWidth: 80 }}>
-        <InputLabel id="demo-simple-select-autowidth-label">Age</InputLabel>
+        <InputLabel id="demo-simple-select-autowidth-label">
+          Travel By:
+        </InputLabel>
         <Select
           labelId="demo-simple-select-autowidth-label"
           id="demo-simple-select-autowidth"
@@ -32,10 +45,10 @@ export default function SelectAutoWidth() {
           autoWidth
           label="Mode of Transportation"
         >
-          {Object.values(TransportationMethod).map((mode) => {
+          {options.map(({ value, description }) => {
             return (
-              <MenuItem key={mode} value={mode}>
-                {mode}
+              <MenuItem key={value} value={value}>
+                {description}
               </MenuItem>
             );
           })}

@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 
-import { AntSwitch } from "./AntSwitch";
+import { UnitsSwitch } from "./UnitsSwitch";
 import ModeDropdown from "./ModeDropdown";
 import { Dispatch } from "react";
 import {
@@ -22,17 +22,22 @@ const PlaceOfInterestCard = (props: IProps) => {
   const { dispatch, placeOfInterest } = props;
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    attribute: "weight" | "searchTerm"
+    attribute: "weight" | "searchTerm" | "distance" | "transportMethod"
   ) => {
-    console.log("pancake", event.target);
     dispatch({
       type: SearchParameterActions.Edit,
       payload: {
         position: 0,
-        ...(attribute === "weight" && { weight: parseInt(event.target.value) }),
-        ...(attribute === "searchTerm" && {
-          searchTerm: event.target.value,
-        }),
+        [attribute]: event.target.value,
+      },
+    });
+  };
+  const handleSwitch = (inMiles: boolean) => {
+    dispatch({
+      type: SearchParameterActions.Edit,
+      payload: {
+        position: 0,
+        inMiles,
       },
     });
   };
@@ -88,6 +93,10 @@ const PlaceOfInterestCard = (props: IProps) => {
               shrink: "true",
               step: 0.1,
             }}
+            value={placeOfInterest.distance}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              handleChange(event, "distance")
+            }
           />
           <Stack
             direction="row"
@@ -96,12 +105,20 @@ const PlaceOfInterestCard = (props: IProps) => {
             paddingLeft="1rem"
           >
             <Typography>Miles</Typography>
-            <AntSwitch inputProps={{ "aria-label": "ant design" }} />
+            <UnitsSwitch
+              checked={!placeOfInterest.inMiles}
+              onChange={() => handleSwitch(!placeOfInterest.inMiles)}
+              name="switchValue"
+              inputProps={{ "aria-label": "ant design" }}
+            />
             <Typography>Kilometers</Typography>
           </Stack>
         </Box>
         <Box paddingY={1}>
-          <ModeDropdown />
+          <ModeDropdown
+            transportMode={placeOfInterest.transportMode}
+            dispatch={dispatch}
+          />
         </Box>
       </Box>
     </Paper>
