@@ -18,7 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function Rank() {
+const Rank = () => {
   return (
     <Container maxWidth="xl">
       <Grid container spacing={2}>
@@ -36,4 +36,6 @@ export default function Rank() {
       <div id="invisibleMap" style={{ width: "0px", height: "0px" }}></div>
     </Container>
   );
-}
+};
+
+export default Rank;
