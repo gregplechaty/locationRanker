@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.http import JsonResponse
 import requests
@@ -19,8 +20,8 @@ def maps_place_top_result(request):
 
     url = format_url(query, home_address, 3000)
 
-    response = requests.request("GET", url, headers=headers, data=payload)
-    return JsonResponse(response.text, safe=False)
+    data = json.loads(request.body.decode("utf-8"))
+    return JsonResponse({"message": "all good"}, safe=False)
 
 
 def format_url(query, home_address, distance):
