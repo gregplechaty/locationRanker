@@ -13,15 +13,50 @@ def my_test_api(request):
 
 
 def maps_place_top_result(request):
-    query = "restaurant"
-    home_address = "43.094543-87.876833"
-    payload = {}
-    headers = {}
+    status = 200
+    data = {}
+    try:
+        # data = json.loads(request.body.decode("utf-8"))
+        data = json.loads(request.body)
+        place_data = get_data(data["placesOfInterest"])
+        response = {
+            "status": "success",
+            "message": "no exception",
+            "data": {"place_data": place_data},
+        }
+    except:
+        status = 404
+        response = {
+            "status": "error",
+            "message": "Ranking failed",
+        }
 
-    url = format_url(query, home_address, 3000)
+    return JsonResponse(response, status=status, safe=False)
 
-    data = json.loads(request.body.decode("utf-8"))
-    return JsonResponse({"message": "all good"}, safe=False)
+
+def get_data(places):
+    place_data = []
+    for place in places:
+        query = "restaurant"
+        home_address = "43.094543-87.876833"
+        url = format_url(query, home_address, 3000)
+        # response = requests.request("GET", url, headers=headers, data=payload)
+        api_data = fake_google_api_data()
+        place_found = False
+        if (
+            api_data["candidates"]
+            and api_data["candidates"][0]["business_status"] == "OPERATIONAL"
+        ):
+            place_found = True
+            candidate_place = api_data["candidates"][0]
+        place_data.append(
+            {
+                "category": place["searchTerm"],
+                "place_found": place_found,
+                "name": candidate_place["name"] or "",
+            }
+        )
+    return place_data
 
 
 def format_url(query, home_address, distance):
@@ -34,3 +69,23 @@ def format_url(query, home_address, distance):
     apikey = "&key=" + os.environ["GOOGLE_API_KEY"]
 
     return base_url + input + "&inputtype=textquery" + location_bias + fields + apikey
+
+
+def fake_google_api_data():
+    return {
+        "candidates": [
+            {
+                "business_status": "OPERATIONAL",
+                "formatted_address": "3549 N Oakland Ave, Milwaukee, WI 53211, United States",
+                "name": "Harry's Bar and Grill",
+                "types": [
+                    "bar",
+                    "restaurant",
+                    "food",
+                    "point_of_interest",
+                    "establishment",
+                ],
+            }
+        ],
+        "status": "OK",
+    }

@@ -28,6 +28,11 @@ const Priorities = () => {
     reducer,
     initialPlacesOfInterest
   );
+  const executeSearch = async () => {
+    const result = await findPlaces(placesOfInterest);
+    // todo: do something with data returned
+    console.log("result:", result);
+  };
   return (
     <Grid item xs={12} md={12}>
       <Paper elevation={2}>
@@ -36,7 +41,7 @@ const Priorities = () => {
             Your Priorities
           </Typography>
           <Box paddingY={2}>
-            <Button variant="contained" onClick={findPlaces}>
+            <Button variant="contained" onClick={executeSearch}>
               Query Your Priorities
             </Button>
           </Box>

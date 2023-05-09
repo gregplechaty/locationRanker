@@ -1,3 +1,5 @@
+import { PlaceOfInterest } from "components/rank/Priorities/utils";
+
 export const testAPI = async () => {
   const response = await fetch("http://localhost:8000/api/data/");
   const data = await response.json();
@@ -19,7 +21,7 @@ const getCookie = (name: string) => {
   return cookieValue;
 };
 
-export const findPlaces = async () => {
+export const findPlaces = async (places: PlaceOfInterest[]) => {
   try {
     const csrftoken = getCookie("csrftoken");
     if (!csrftoken) {
@@ -37,11 +39,11 @@ export const findPlaces = async () => {
           "Content-Type": "application/json",
         },
         referrerPolicy: "no-referrer",
-        body: JSON.stringify({ query: "library" }),
+        body: JSON.stringify({ placesOfInterest: places }),
       }
     );
     const data = await response.json();
-    console.log(data);
+    return data;
   } catch {
     throw new Error("failed to successfully query the request");
   }
