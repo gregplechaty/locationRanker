@@ -21,7 +21,10 @@ const getCookie = (name: string) => {
   return cookieValue;
 };
 
-export const findPlaces = async (places: PlaceOfInterest[]) => {
+export const findPlaces = async (
+  places: PlaceOfInterest[],
+  homeAddress: string
+) => {
   try {
     const csrftoken = getCookie("csrftoken");
     if (!csrftoken) {
@@ -39,7 +42,10 @@ export const findPlaces = async (places: PlaceOfInterest[]) => {
           "Content-Type": "application/json",
         },
         referrerPolicy: "no-referrer",
-        body: JSON.stringify({ placesOfInterest: places }),
+        body: JSON.stringify({
+          placesOfInterest: places,
+          homeAddress: homeAddress,
+        }),
       }
     );
     const data = await response.json();

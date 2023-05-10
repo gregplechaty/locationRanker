@@ -23,13 +23,13 @@ const initialPlacesOfInterest: PlaceOfInterest[] = [
 ];
 
 const Priorities = () => {
-  const [homeAddress, setHomeAddress] = useState<String>("");
+  const [homeAddress, setHomeAddress] = useState<string>("");
   const [placesOfInterest, dispatchplacesOfInterest] = useReducer(
     reducer,
     initialPlacesOfInterest
   );
   const executeSearch = async () => {
-    const result = await findPlaces(placesOfInterest);
+    const result = await findPlaces(placesOfInterest, homeAddress);
     // todo: do something with data returned
     console.log("result:", result);
   };
