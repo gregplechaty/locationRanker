@@ -18,7 +18,7 @@ const initialPlacesOfInterest: PlaceOfInterest[] = [
     weight: 100,
     distance: 1,
     inMiles: true,
-    transportMode: "walk",
+    transportMode: "WALKING",
   },
 ];
 

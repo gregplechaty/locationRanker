@@ -40,7 +40,7 @@ export const reducer = (
         distance: distance ?? state[position]?.distance ?? 0,
         inMiles: typeof inMiles === "boolean" ? inMiles : true,
         transportMode:
-          transportMode ?? state[position]?.transportMode ?? "walk",
+          transportMode ?? state[position]?.transportMode ?? "WALKING",
       };
       const newState = [...state];
       if (newState[position]) {

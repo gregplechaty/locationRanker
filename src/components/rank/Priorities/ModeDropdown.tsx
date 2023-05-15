@@ -7,10 +7,10 @@ import { Dispatch } from "react";
 import { PlaceOfInterestAction, SearchParameterActions } from "./utils";
 
 const options = [
-  { value: "walk", description: "Walking" },
-  { value: "cycle", description: "Cycling" },
-  { value: "drive", description: "Driving" },
-  { value: "transport", description: "Public Transit" },
+  { value: "WALKING", description: "Walking" },
+  { value: "BICYCLING", description: "Cycling" },
+  { value: "DRIVING", description: "Driving" },
+  { value: "TRANSIT", description: "Public Transit" },
 ];
 
 interface IProps {
