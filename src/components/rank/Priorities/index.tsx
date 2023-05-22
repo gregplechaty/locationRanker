@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
 import { findPlaces } from "utils/search/googlePlacesSearch";
 import { reducer, PlaceOfInterest } from "./utils";
 import PlaceOfInterestCard from "./PlaceOfInterest";
@@ -32,13 +33,18 @@ const Priorities = (props: IProps) => {
     reducer,
     initialPlacesOfInterest
   );
+  const [error, setError] = useState<string | null>("");
   const executeSearch = async () => {
     const result = await findPlaces(placesOfInterest, homeAddress);
     console.log("result:", result);
     if (result?.status === 200 && result?.data?.score) {
       props.setOverallScore(result.data.score);
+      setError("");
     } else {
       props.setOverallScore(null);
+      result?.message
+        ? setError(result.message)
+        : setError("Score ranking failed. Please review inputs and try again");
     }
   };
   return (
@@ -48,6 +54,7 @@ const Priorities = (props: IProps) => {
           <Typography variant="h4" component="h3">
             Your Priorities
           </Typography>
+          {!!error && <Alert severity="warning">{error}</Alert>}
           <Box paddingY={2}>
             <Button variant="contained" onClick={executeSearch}>
               Query Your Priorities
