@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { Dispatch, SetStateAction, useReducer, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -22,7 +22,11 @@ const initialPlacesOfInterest: PlaceOfInterest[] = [
   },
 ];
 
-const Priorities = () => {
+interface IProps {
+  setOverallScore: Dispatch<SetStateAction<number | null>>;
+}
+
+const Priorities = (props: IProps) => {
   const [homeAddress, setHomeAddress] = useState<string>("");
   const [placesOfInterest, dispatchplacesOfInterest] = useReducer(
     reducer,
@@ -30,8 +34,12 @@ const Priorities = () => {
   );
   const executeSearch = async () => {
     const result = await findPlaces(placesOfInterest, homeAddress);
-    // todo: do something with data returned
     console.log("result:", result);
+    if (result?.status === 200 && result?.data?.score) {
+      props.setOverallScore(result.data.score);
+    } else {
+      props.setOverallScore(null);
+    }
   };
   return (
     <Grid item xs={12} md={12}>

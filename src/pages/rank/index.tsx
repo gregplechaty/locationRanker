@@ -9,6 +9,7 @@ import ScoreCard from "components/rank/ScoreCard";
 import Map from "components/rank/Map";
 import Priorities from "components/rank/Priorities";
 import SearchDetails from "components/rank/SearchDetails";
+import { useState } from "react";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -19,12 +20,13 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Rank = () => {
+  const [overallScore, setOverallScore] = useState<number | null>(null);
   return (
     <Container maxWidth="xl">
       <Grid container spacing={2}>
         <Map />
-        <ScoreCard />
-        <Priorities />
+        <ScoreCard overallScore={overallScore} />
+        <Priorities setOverallScore={setOverallScore} />
         <SearchDetails />
       </Grid>
       <div>
