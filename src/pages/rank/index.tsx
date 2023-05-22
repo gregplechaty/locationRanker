@@ -24,7 +24,6 @@ const Rank = () => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.API_KEY ?? "",
   });
-  console.log("api key weee", process.env.GOOGLE_API_KEY);
   const [overallScore, setOverallScore] = useState<number | null>(null);
   return (
     <Container maxWidth="xl">
