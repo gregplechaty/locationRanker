@@ -7,6 +7,7 @@ from .utils import (
     calculate_score,
     format_url_findplacefromtext,
     format_url_getdirections,
+    generate_geocode,
 )
 from .fake_api_data import (
     fake_google_api_data_findplacefromtext,
@@ -41,13 +42,17 @@ def maps_place_top_result(request):
             status = 400
             message = "Missing key: placesOfInterest"
             raise Exception("Missing key: placesOfInterest")
-        place_data, overall_score = get_data(
+        place_data, overall_score, home_address_geocode = get_data(
             data["placesOfInterest"], data["homeAddress"]
         )
         response = {
             "status": status,
             "message": message,
-            "data": {"score": overall_score, "place_data": place_data},
+            "data": {
+                "score": overall_score,
+                "home_address_geocode": home_address_geocode,
+                "place_data": place_data,
+            },
         }
     except:
         if status == 200:
@@ -68,6 +73,7 @@ def maps_place_top_result(request):
 
 def get_data(places_of_interest, home_address):
     place_data = []
+    home_address_geocode = generate_geocode(home_address)
     for place_of_interest in places_of_interest:
         query = place_of_interest["searchTerm"]
         home_address = home_address
@@ -102,6 +108,7 @@ def get_data(places_of_interest, home_address):
             place_of_interest["distance"],
             place_of_interest["inMiles"],
         )
+        geocode = generate_geocode(target_place["formatted_address"])
         place_data.append(
             {
                 "is_place_found": place_found,
@@ -111,10 +118,11 @@ def get_data(places_of_interest, home_address):
                 "mode": place_of_interest["transportMode"],
                 "score": score,
                 "distance": route_distance,
+                "address_geocode": geocode,
             }
         )
     overall_score = calc_overall_score(list(map(get_place_score, place_data)))
-    return place_data, overall_score
+    return place_data, overall_score, home_address_geocode
 
 
 def get_place_score(place):

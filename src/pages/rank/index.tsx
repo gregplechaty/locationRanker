@@ -1,5 +1,4 @@
 import Link from "next/link";
-import styles from "@/styles/Map.module.css";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
@@ -18,8 +17,14 @@ export interface RankResult {
   data?: RankData;
 }
 
+export interface Geocode {
+  lat: number;
+  lng: number;
+}
+
 interface RankData {
   score: number;
+  home_address_geocode?: Geocode;
   place_data?: PlaceData[];
 }
 
@@ -31,6 +36,7 @@ interface PlaceData {
   mode: string;
   score: number;
   distace: number;
+  address_geocode: Geocode;
 }
 
 const Item = styled(Paper)(({ theme }) => ({
