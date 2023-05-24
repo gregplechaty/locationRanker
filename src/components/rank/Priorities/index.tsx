@@ -12,6 +12,7 @@ import Alert from "@mui/material/Alert";
 import { findPlaces } from "utils/search/googlePlacesSearch";
 import { reducer, PlaceOfInterest } from "./utils";
 import PlaceOfInterestCard from "./PlaceOfInterest";
+import { RankResult } from "pages/rank";
 
 const initialPlacesOfInterest: PlaceOfInterest[] = [
   {
@@ -24,7 +25,7 @@ const initialPlacesOfInterest: PlaceOfInterest[] = [
 ];
 
 interface IProps {
-  setOverallScore: Dispatch<SetStateAction<number | null>>;
+  setRankingResult: Dispatch<SetStateAction<RankResult | null>>;
 }
 
 const Priorities = (props: IProps) => {
@@ -38,10 +39,10 @@ const Priorities = (props: IProps) => {
     const result = await findPlaces(placesOfInterest, homeAddress);
     console.log("result:", result);
     if (result?.status === 200 && result?.data?.score) {
-      props.setOverallScore(result.data.score);
+      props.setRankingResult(result);
       setError("");
     } else {
-      props.setOverallScore(null);
+      props.setRankingResult(result);
       result?.message
         ? setError(result.message)
         : setError("Score ranking failed. Please review inputs and try again");

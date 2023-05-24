@@ -1,4 +1,5 @@
 import os
+import requests
 
 
 def calculate_score(place_of_interest_desired_distance, distance, inMiles):
@@ -36,3 +37,23 @@ def format_url_getdirections(target_place, home_address, transport_mode):
     mode = "&mode=" + transport_mode
     api_key = "&key=" + os.environ["GOOGLE_API_KEY"]
     return base_url + origin + destination + mode + api_key
+
+
+def generate_geocode(address):
+    api_key = "&key=" + os.environ["GOOGLE_API_KEY"]
+    url = (
+        "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + api_key
+    )
+    try:
+        response = requests.request("GET", url, headers={}, data={})
+        response_json = response.json()
+        return response_json["results"][0]["geometry"]["location"]
+    except:
+        status = 500
+        message = "Ranking failed while generating geocode data for an address"
+        response = {
+            "status": status,
+            "message": message,
+        }
+
+    return response_json

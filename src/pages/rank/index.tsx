@@ -1,5 +1,4 @@
 import Link from "next/link";
-import styles from "@/styles/Rank.module.css";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
@@ -10,6 +9,35 @@ import Map from "components/rank/Map";
 import Priorities from "components/rank/Priorities";
 import SearchDetails from "components/rank/SearchDetails";
 import { useState } from "react";
+import { useLoadScript } from "@react-google-maps/api";
+
+export interface RankResult {
+  status: number;
+  message: string;
+  data?: RankData;
+}
+
+export interface Geocode {
+  lat: number;
+  lng: number;
+}
+
+interface RankData {
+  score: number;
+  home_address_geocode?: Geocode;
+  place_data?: PlaceData[];
+}
+
+interface PlaceData {
+  is_place_found: boolean;
+  search_term: string;
+  name: string;
+  address: string;
+  mode: string;
+  score: number;
+  distace: number;
+  address_geocode: Geocode;
+}
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -20,13 +48,22 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Rank = () => {
-  const [overallScore, setOverallScore] = useState<number | null>(null);
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.API_KEY ?? "",
+  });
+  const [rankingResult, setRankingResult] = useState<RankResult | null>(null);
+
+  const overallScore = rankingResult?.data?.score ?? null;
   return (
     <Container maxWidth="xl">
       <Grid container spacing={2}>
-        <Map />
+        <Map
+          rankingResult={rankingResult}
+          shouldDisplayMap={!!overallScore}
+          isLoaded={isLoaded}
+        />
         <ScoreCard overallScore={overallScore} />
-        <Priorities setOverallScore={setOverallScore} />
+        <Priorities setRankingResult={setRankingResult} />
         <SearchDetails />
       </Grid>
       <div>
