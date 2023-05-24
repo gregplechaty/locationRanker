@@ -12,6 +12,27 @@ import SearchDetails from "components/rank/SearchDetails";
 import { useState } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 
+export interface RankResult {
+  status: number;
+  message: string;
+  data?: RankData;
+}
+
+interface RankData {
+  score: number;
+  place_data?: PlaceData[];
+}
+
+interface PlaceData {
+  is_place_found: boolean;
+  search_term: string;
+  name: string;
+  address: string;
+  mode: string;
+  score: number;
+  distace: number;
+}
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -24,13 +45,19 @@ const Rank = () => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.API_KEY ?? "",
   });
-  const [overallScore, setOverallScore] = useState<number | null>(null);
+  const [rankingResult, setRankingResult] = useState<RankResult | null>(null);
+
+  const overallScore = rankingResult?.data?.score ?? null;
   return (
     <Container maxWidth="xl">
       <Grid container spacing={2}>
-        <Map isLoaded={isLoaded} />
+        <Map
+          rankingResult={rankingResult}
+          shouldDisplayMap={!!overallScore}
+          isLoaded={isLoaded}
+        />
         <ScoreCard overallScore={overallScore} />
-        <Priorities setOverallScore={setOverallScore} />
+        <Priorities setRankingResult={setRankingResult} />
         <SearchDetails />
       </Grid>
       <div>

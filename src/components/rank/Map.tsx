@@ -1,8 +1,10 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import styles from "styles/rank/rankCard.module.css";
 import { GoogleMap, Marker } from "@react-google-maps/api";
+
+import styles from "styles/rank/rankCard.module.css";
+import { RankResult } from "pages/rank";
 
 const containerStyle = {
   height: "400px",
@@ -14,6 +16,8 @@ type MapOptions = google.maps.MapOptions;
 
 interface IProps {
   isLoaded: boolean;
+  rankingResult: RankResult | null;
+  shouldDisplayMap: boolean;
 }
 
 const Map = (props: IProps) => {
@@ -40,7 +44,7 @@ const Map = (props: IProps) => {
   return (
     <Grid item xs={12} sm={8}>
       <Paper className={styles.minHeight} elevation={2}>
-        {props.isLoaded ? (
+        {props.isLoaded && props.shouldDisplayMap ? (
           <GoogleMap
             zoom={13}
             center={center}
@@ -53,8 +57,10 @@ const Map = (props: IProps) => {
               title="Home Address"
             />
           </GoogleMap>
-        ) : (
+        ) : !props.isLoaded && props.shouldDisplayMap ? (
           <div>map is loading...</div>
+        ) : (
+          <div>Map will display here after you rank a home address.</div>
         )}
       </Paper>
     </Grid>
