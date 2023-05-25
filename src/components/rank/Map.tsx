@@ -65,7 +65,6 @@ const Map = (props: IProps) => {
     [rankingResult?.data?.place_data]
   );
 
-  const [homeAddress, setHomeAddres] = useState<LatLngLiteral>();
   return (
     <Grid item xs={12} sm={8}>
       <Paper className={styles.minHeight} elevation={2}>
@@ -79,12 +78,13 @@ const Map = (props: IProps) => {
           >
             {center && (
               <Marker
-                key={`home-address}`}
+                key={`home-address`}
                 position={center}
                 title={"Home Address"}
               />
             )}
             {markers &&
+              markers.length > 0 &&
               markers.map((place) => (
                 <Marker
                   key={`${place.title}-${place.position.lat}`}

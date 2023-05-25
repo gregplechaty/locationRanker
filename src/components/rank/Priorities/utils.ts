@@ -34,10 +34,16 @@ export const reducer = (
     action.payload;
   switch (action.type) {
     case SearchParameterActions.Edit:
+      const newDistance =
+        typeof distance === "number"
+          ? distance
+          : typeof state[position]?.distance === "number"
+          ? state[position]?.distance
+          : 0;
       const newPlace = {
         searchTerm: searchTerm ?? state[position]?.searchTerm ?? "",
         weight: weight ?? state[position]?.weight ?? 0,
-        distance: distance ?? state[position]?.distance ?? 0,
+        distance: newDistance,
         inMiles: typeof inMiles === "boolean" ? inMiles : true,
         transportMode:
           transportMode ?? state[position]?.transportMode ?? "WALKING",

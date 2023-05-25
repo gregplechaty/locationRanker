@@ -2,20 +2,23 @@ import os
 import requests
 
 
+# get a score out of 100. Simplistic for now
 def calculate_score(place_of_interest_desired_distance, distance, inMiles):
     route_distance = (
         place_of_interest_desired_distance / 1609
         if inMiles
         else place_of_interest_desired_distance / 1000
     )
-    # get a score out of 100. Simplistic for now
+    # location is further away than distance
     if distance < route_distance:
         return 0, route_distance
+    # place_of_interest is less than the max distance, but more than half of the
+    # max distance value
     if (0.5 * distance) < route_distance:
-        return (
-            50 + (50 * ((distance - route_distance)(route_distance * 0.5))),
-            route_distance,
-        )
+        score = 50 + (50 * ((distance - route_distance) * (route_distance * 0.5)))
+        rounded_score = round(score, 2)
+        return rounded_score, route_distance
+    # route is within half the max distance
     return 100, route_distance
 
 

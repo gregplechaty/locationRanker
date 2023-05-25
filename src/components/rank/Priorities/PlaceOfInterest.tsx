@@ -22,13 +22,17 @@ const PlaceOfInterestCard = (props: IProps) => {
   const { dispatch, placeOfInterest } = props;
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    attribute: "weight" | "searchTerm" | "distance" | "transportMethod"
+    attribute: "searchTerm" | "transportMethod" | "weight" | "distance"
   ) => {
+    const value =
+      attribute === "weight" || attribute === "distance"
+        ? parseFloat(event.target.value) ?? 0
+        : event.target.value;
     dispatch({
       type: SearchParameterActions.Edit,
       payload: {
         position: 0,
-        [attribute]: event.target.value,
+        [attribute]: value,
       },
     });
   };
