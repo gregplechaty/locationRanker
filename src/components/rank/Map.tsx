@@ -6,9 +6,9 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import styles from "styles/rank/rankCard.module.css";
 import { Geocode, RankResult } from "pages/rank";
 
-const containerStyle = {
-  height: "400px",
-  width: "100%",
+const homeLabel = {
+  text: "Home Address",
+  fontWeight: "bold",
 };
 
 type LatLngLiteral = google.maps.LatLngLiteral;
@@ -26,14 +26,21 @@ interface IProps {
 
 const Map = (props: IProps) => {
   const { isLoaded, rankingResult, shouldDisplayMap } = props;
+  const [, setMap] = useState<google.maps.Map | null>(null);
+  const onLoad = (map: google.maps.Map) => {
+    console.log("onload");
+    const bounds = new window.google.maps.LatLngBounds(center);
+    markers?.map((item) => {
+      bounds.extend(item.position);
+    });
+    map.fitBounds(bounds);
 
-  const mapRef = useRef<google.maps.Map>();
+    setMap(map);
+  };
 
-  // const onLoad = useCallback((map: google.maps.Map | undefined): void => {
-  //   if (map) {
-  //     mapRef.current = map;
-  //   }
-  // }, []);
+  const onUnmount = useCallback(function callback() {
+    setMap(null);
+  }, []);
   const center = useMemo<LatLngLiteral>(
     () =>
       rankingResult?.data?.home_address_geocode?.lat &&
@@ -74,13 +81,14 @@ const Map = (props: IProps) => {
             center={center}
             mapContainerClassName="map-container"
             options={options}
-            // onLoad={onLoad}
+            onLoad={onLoad}
+            onUnmount={onUnmount}
           >
             {center && (
               <Marker
                 key={`home-address`}
                 position={center}
-                title={"Home Address"}
+                label={homeLabel}
               />
             )}
             {markers &&
@@ -89,7 +97,7 @@ const Map = (props: IProps) => {
                 <Marker
                   key={`${place.title}-${place.position.lat}`}
                   position={place.position}
-                  title={place.title}
+                  label={place.title}
                 />
               ))}
           </GoogleMap>
