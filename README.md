@@ -1,38 +1,65 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Location Ranker
 
-## Getting Started
+Thanks for checking this out! The idea is to, while looking for a new apartment or house or place to live/visit, scoring how good that place is based on what you want it to be near.
 
-First, run the development server:
+## Steps to run locally
+
+Eventually it would be fun to host this. For now, just clone and run locally.
+
+### Client
+
+1. rename '.example.env.local' to '.env.local'. Replace "YOUR_API_KEY" with your Google API key.
+
+2. Separately, get an API key for Google Maps.
+
+- If you don't have one, check this page for how to set up an account and get a key.
+- You'll need to make sure the key is enabled for the following APIs:
+  - Directions API
+  - Geocoding API
+  - Maps JavaScript API
+  - Places API
+
+2. install packages:
+
+   ```bash
+   npm run install
+   ```
+
+3. start development environment: `npm run dev`
+
+### Server
+
+1. within './server', rename '.example.env' to '.env' and replace the preset values:
+
+- SECRET_KEY: generate a django project key by running these two commands in your terminal:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+  python3 -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 ```
 
+- Insert Google API Key, same from Client.
+- USE_FAKE_API_DATA: If set to TRUE, code will reference hardcoded dummy data. When developing, this will limit API calls, and thus costs associated with Google's API.
+
+2. At './server', create a shell environment. I used pipenv when developing, but pip or other options should work.
+
+```bash
+# if you don't have pipenv, run install
+pip install pipenv
+pipenv shell
+```
+
+3. Run DB migrations:
+
+```bash
+python manage.py migrate
+```
+
+3. Run server:
+
+```bash
+python manage.py runserver
+```
+
+### See the application:
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
