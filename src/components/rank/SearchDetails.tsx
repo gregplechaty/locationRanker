@@ -21,10 +21,6 @@ const SearchDetails = (props: IProps) => {
       <Paper className={styles.minHeight} elevation={2}>
         <Box padding={1}>
           <Typography variant="h4">Details</Typography>
-          <Paper
-            elevation={3}
-            sx={{ padding: "1rem", margin: "1rem 0.5rem", maxWidth: "40rem" }}
-          ></Paper>
           {rankingResult.data.place_data.map((placeData) => (
             <DetailCard
               key={`${placeData.search_term}-${placeData.address_geocode}`}

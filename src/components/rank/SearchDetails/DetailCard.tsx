@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { PlaceData } from "pages/rank";
+import CopyToClipboardButton from "./CopyToClipboard";
 
 interface IProps {
   placeData: PlaceData;
@@ -25,6 +26,7 @@ const DetailCard = (props: IProps) => {
         <Stack direction="row" spacing={2}>
           <Typography variant="h5">Address:</Typography>
           <Typography variant="h5">{address} </Typography>
+          <CopyToClipboardButton text={address} />
         </Stack>
         <Stack direction="row" spacing={2}>
           <Typography variant="h5">Distance:</Typography>
