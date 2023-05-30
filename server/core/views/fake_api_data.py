@@ -18,6 +18,10 @@ def fake_google_api_data_findplacefromtext():
     }
 
 
+def fake_google_api_data_getgeocde():
+    return {"lat": 43.08292100000001, "lng": -87.88792099999999}
+
+
 def fake_google_api_data_getdirections():
     return {
         "geocoded_waypoints": [

@@ -12,6 +12,7 @@ from .utils import (
 from .fake_api_data import (
     fake_google_api_data_findplacefromtext,
     fake_google_api_data_getdirections,
+    fake_google_api_data_getgeocde,
 )
 
 should_use_fake_api_data = (
@@ -97,7 +98,6 @@ def get_data(places_of_interest, home_address):
         )
         if distance["status"] == "INVALID_REQUEST":
             raise Exception("Distance calculation failed:", distance["error_message"])
-        # calculate score
 
         distance_objects_only = list(
             map(lambda route: route["legs"][0]["distance"], distance["routes"])
@@ -108,7 +108,11 @@ def get_data(places_of_interest, home_address):
             place_of_interest["distance"],
             place_of_interest["inMiles"],
         )
-        geocode = generate_geocode(target_place["formatted_address"])
+        if should_use_fake_api_data:
+            geocode = fake_google_api_data_getgeocde()
+        else:
+            geocode = generate_geocode(target_place["formatted_address"])
+
         place_data.append(
             {
                 "is_place_found": place_found,
@@ -118,7 +122,10 @@ def get_data(places_of_interest, home_address):
                 "mode": place_of_interest["transportMode"],
                 "score": score,
                 "distance": route_distance,
+                "distance_text": distance["routes"][0]["legs"][0]["distance"]["text"],
                 "address_geocode": geocode,
+                "business_status": target_place["business_status"],
+                "types": target_place["types"],
             }
         )
     overall_score = calc_overall_score(list(map(get_place_score, place_data)))

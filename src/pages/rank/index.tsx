@@ -28,15 +28,18 @@ interface RankData {
   place_data?: PlaceData[];
 }
 
-interface PlaceData {
+export interface PlaceData {
   is_place_found: boolean;
   search_term: string;
   name: string;
   address: string;
   mode: string;
   score: number;
-  distace: number;
+  distance: number;
+  distance_text?: string;
   address_geocode: Geocode;
+  business_status?: string;
+  types?: string[];
 }
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -64,7 +67,7 @@ const Rank = () => {
         />
         <ScoreCard overallScore={overallScore} />
         <Priorities setRankingResult={setRankingResult} />
-        <SearchDetails />
+        <SearchDetails isLoaded={isLoaded} rankingResult={rankingResult} />
       </Grid>
       <div>
         <Button variant="contained">
