@@ -91,8 +91,9 @@ const Priorities = (props: IProps) => {
               color={placesOfInterest.length > 4 ? "error" : "primary"}
               aria-label="add"
               disabled={!!(placesOfInterest.length > 4)}
+              onClick={addPlaceOfInterest}
             >
-              <AddIcon onClick={addPlaceOfInterest} />
+              <AddIcon />
             </Fab>
           </Tooltip>
         </Box>

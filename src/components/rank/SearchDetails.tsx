@@ -21,9 +21,9 @@ const SearchDetails = (props: IProps) => {
       <Paper className={styles.minHeight} elevation={2}>
         <Box padding={1}>
           <Typography variant="h4">Details</Typography>
-          {rankingResult.data.place_data.map((placeData) => (
+          {rankingResult.data.place_data.map((placeData, i) => (
             <DetailCard
-              key={`${placeData.search_term}-${placeData.address_geocode}`}
+              key={`${placeData.search_term}-${placeData.address_geocode}-${i}`}
               placeData={placeData}
             />
           ))}
