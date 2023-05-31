@@ -1,6 +1,8 @@
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 
@@ -16,10 +18,11 @@ import {
 interface IProps {
   dispatch: Dispatch<PlaceOfInterestAction>;
   placeOfInterest: PlaceOfInterest;
+  position: number;
 }
 
 const PlaceOfInterestCard = (props: IProps) => {
-  const { dispatch, placeOfInterest } = props;
+  const { dispatch, placeOfInterest, position } = props;
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     attribute: "searchTerm" | "transportMethod" | "weight" | "distance"
@@ -31,16 +34,22 @@ const PlaceOfInterestCard = (props: IProps) => {
     dispatch({
       type: SearchParameterActions.Edit,
       payload: {
-        position: 0,
+        position,
         [attribute]: value,
       },
+    });
+  };
+  const deleteCard = () => {
+    dispatch({
+      type: SearchParameterActions.Delete,
+      payload: { position: props.position },
     });
   };
   const handleSwitch = (inMiles: boolean) => {
     dispatch({
       type: SearchParameterActions.Edit,
       payload: {
-        position: 0,
+        position,
         inMiles,
       },
     });
@@ -51,7 +60,7 @@ const PlaceOfInterestCard = (props: IProps) => {
         <Box display="flex" paddingY={1}>
           <Box paddingX={1}>
             <Typography variant="h5" component="h4">
-              Look for This
+              Place of Interest
             </Typography>
           </Box>
           <Box paddingX={1}>
@@ -71,6 +80,13 @@ const PlaceOfInterestCard = (props: IProps) => {
               }
             />
           </Box>
+          <Tooltip title="Delete Place of Interest">
+            <DeleteForeverIcon
+              fontSize="large"
+              onClick={deleteCard}
+              sx={{ color: "#c61c1c", cursor: "pointer" }}
+            />
+          </Tooltip>
         </Box>
 
         <Box paddingY={1}>
@@ -121,6 +137,7 @@ const PlaceOfInterestCard = (props: IProps) => {
         <Box paddingY={1}>
           <ModeDropdown
             transportMode={placeOfInterest.transportMode}
+            position={position}
             dispatch={dispatch}
           />
         </Box>

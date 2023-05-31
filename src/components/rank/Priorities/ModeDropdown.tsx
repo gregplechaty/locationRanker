@@ -14,18 +14,19 @@ const options = [
 ];
 
 interface IProps {
-  transportMode: string;
   dispatch: Dispatch<PlaceOfInterestAction>;
+  position: number;
+  transportMode: string;
 }
 
 export default function SelectAutoWidth(props: IProps) {
-  const { transportMode, dispatch } = props;
+  const { dispatch, position, transportMode } = props;
 
   const handleChange = (event: SelectChangeEvent) => {
     dispatch({
       type: SearchParameterActions.Edit,
       payload: {
-        position: 0,
+        position,
         transportMode: event.target.value,
       },
     });
