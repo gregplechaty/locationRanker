@@ -82,6 +82,7 @@ const Priorities = (props: IProps) => {
             <PlaceOfInterestCard
               key={place.id}
               dispatch={dispatchplacesOfInterest}
+              numOfPlaces={placesOfInterest?.length ?? 0}
               placeOfInterest={place}
               position={i}
             />

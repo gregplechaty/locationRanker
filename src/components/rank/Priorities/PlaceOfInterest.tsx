@@ -17,12 +17,13 @@ import {
 
 interface IProps {
   dispatch: Dispatch<PlaceOfInterestAction>;
+  numOfPlaces: number;
   placeOfInterest: PlaceOfInterest;
   position: number;
 }
 
 const PlaceOfInterestCard = (props: IProps) => {
-  const { dispatch, placeOfInterest, position } = props;
+  const { dispatch, numOfPlaces, placeOfInterest, position } = props;
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     attribute: "searchTerm" | "transportMethod" | "weight" | "distance"
@@ -80,11 +81,14 @@ const PlaceOfInterestCard = (props: IProps) => {
               }
             />
           </Box>
-          <Tooltip title="Delete Place of Interest">
+          <Tooltip title={numOfPlaces > 1 ? "Delete Place of Interest" : ""}>
             <DeleteForeverIcon
               fontSize="large"
               onClick={deleteCard}
-              sx={{ color: "#c61c1c", cursor: "pointer" }}
+              sx={{
+                color: numOfPlaces < 2 ? "grey" : "#c61c1c",
+                cursor: "pointer",
+              }}
             />
           </Tooltip>
         </Box>
