@@ -1,28 +1,26 @@
 import { Dispatch, SetStateAction, useReducer, useState } from "react";
+import isArray from "lodash/isArray";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import { findPlaces } from "utils/search/googlePlacesSearch";
-import { reducer, PlaceOfInterest } from "./utils";
+import {
+  createNewPlaceOfInterest,
+  reducer,
+  PlaceOfInterest,
+  SearchParameterActions,
+} from "./utils";
 import PlaceOfInterestCard from "./PlaceOfInterest";
 import { RankResult } from "pages/rank";
 
-const initialPlacesOfInterest: PlaceOfInterest[] = [
-  {
-    searchTerm: "",
-    weight: 100,
-    distance: 1,
-    inMiles: true,
-    transportMode: "WALKING",
-  },
-];
+export const MAX_NUMBER_PLACES = 5;
 
 interface IProps {
   setRankingResult: Dispatch<SetStateAction<RankResult | null>>;
@@ -30,11 +28,22 @@ interface IProps {
 
 const Priorities = (props: IProps) => {
   const [homeAddress, setHomeAddress] = useState<string>("");
-  const [placesOfInterest, dispatchplacesOfInterest] = useReducer(
-    reducer,
-    initialPlacesOfInterest
-  );
+  const [placesOfInterest, dispatchplacesOfInterest] = useReducer(reducer, [
+    createNewPlaceOfInterest(),
+  ]);
   const [error, setError] = useState<string | null>("");
+  const addPlaceOfInterest = () => {
+    if (
+      isArray(placesOfInterest) &&
+      placesOfInterest.length < MAX_NUMBER_PLACES
+    )
+      dispatchplacesOfInterest({
+        type: SearchParameterActions.Create,
+        payload: {
+          position: placesOfInterest.length,
+        },
+      });
+  };
   const executeSearch = async () => {
     const result = await findPlaces(placesOfInterest, homeAddress);
     console.log("result:", result);
@@ -71,15 +80,23 @@ const Priorities = (props: IProps) => {
           />
           {placesOfInterest.map((place, i) => (
             <PlaceOfInterestCard
-              key={`key-${i}`}
+              key={place.id}
               dispatch={dispatchplacesOfInterest}
+              numOfPlaces={placesOfInterest?.length ?? 0}
               placeOfInterest={place}
+              position={i}
             />
           ))}
-
-          <Fab color="primary" aria-label="add">
-            <AddIcon />
-          </Fab>
+          <Tooltip title="Add Place of Interest (max: 5)">
+            <Fab
+              color={placesOfInterest.length > 4 ? "error" : "primary"}
+              aria-label="add"
+              disabled={!!(placesOfInterest.length > 4)}
+              onClick={addPlaceOfInterest}
+            >
+              <AddIcon />
+            </Fab>
+          </Tooltip>
         </Box>
       </Paper>
     </Grid>
